@@ -1,0 +1,79 @@
+#include <iostream>
+EXEC SQL include sqlca;
+using namespace std;
+
+void set_error_handler()
+{
+    EXEC SQL WHENEVER SQLERROR CALL error_handler();
+}
+void error_handler()
+{
+	cout << "***** Error : " << sqlca.sqlerrm.sqlerrmc;
+	exit(-1);
+}
+void connectionToDb(const char* host, const char* dbname, const char* user, const char* pass) {
+	EXEC SQL BEGIN DECLARE SECTION;
+		char target[256];
+		const char* db = dbname;
+		const char* u = user;
+		const char* p = pass;
+	EXEC SQL END DECLARE SECTION;
+
+	strcpy(target, db);
+	strcat(target, "@");
+	strcat(target, host);
+
+	cout << "target: " << target << endl;
+
+	EXEC SQL CONNECT TO :target USER :u USING :p;
+}
+
+#include "country.c"
+#include "state.c"
+#include "city.c"
+#include "passenger.c"
+
+void menu() {
+	while (true) {
+		cout << "Меню:" << endl;
+		cout << "1. Управление странами:" << endl;
+		cout << "2. Управления Административными единицами" << endl;
+		cout << "3. Управление городами" << endl;
+		cout << "4. Управление пассажирами" << endl;
+		cout << "0. �����" << endl;
+		int number;
+		cin >> number;
+		switch (number) {
+			case 1: {
+				menu_country();
+				break;
+			}
+			case 2: {
+				menu_state();
+				break;
+			}
+			case 3: {
+				menu_city();
+				break;
+			}
+			case 4: {
+				menu_passenger();
+				break;
+			}
+			case 0: {
+				return;
+			}
+		}
+	}
+	return;
+}
+
+int main() {
+	set_error_handler();
+
+	connectionToDb("localhost", "rgr_db", "alex", "1111");
+
+	menu();
+
+	return 0;
+}
