@@ -131,6 +131,8 @@ if (sqlca.sqlcode < 0) error_handler ( );}
 #include "state.c"
 #include "city.c"
 #include "passenger.c"
+#include "trip.c"
+#include "transport_route.c"
 
 void menu() {
 	while (true) {
@@ -139,7 +141,9 @@ void menu() {
 		cout << "2. Управления Административными единицами" << endl;
 		cout << "3. Управление городами" << endl;
 		cout << "4. Управление пассажирами" << endl;
-		cout << "0. �����" << endl;
+    cout << "5. Управление поездками" << endl;
+    cout << "6. Управление транспортными маршрутами" << endl;
+		cout << "0. Выход" << endl;
 		int number;
 		cin >> number;
 		switch (number) {
@@ -159,6 +163,14 @@ void menu() {
 				menu_passenger();
 				break;
 			}
+      case 5: {
+      menu_trip();
+      break;
+      }
+      case 6: {
+       menu_transport_route();
+       break;
+       }
 			case 0: {
 				return;
 			}
@@ -170,7 +182,7 @@ void menu() {
 int main() {
 	set_error_handler();
 
-	connectionToDb("localhost", "rgr_db", "alex", "1111");
+	connectionToDb("localhost", "rgr", "alex", "1111");
 
 	menu();
 

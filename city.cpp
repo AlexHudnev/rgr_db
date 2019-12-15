@@ -37,31 +37,88 @@ void create_city() {
 	EXEC SQL COMMIT;
 	return;
 }
+
+void search_city(){
+	cout << "Введите название AE:" << endl;
+	string tmpname;
+	cin >> tmpname;
+	const char* name = tmpname.c_str();
+
+	EXEC SQL BEGIN DECLARE SECTION;
+	const char* sn = name;
+	char s [256];
+	char ln [256];
+	char n [256];
+	int pd = -1;
+
+	EXEC SQL END DECLARE SECTION;
+
+
+		EXEC SQL DECLARE cursor_city_show CURSOR FOR
+			SELECT  country_name, leader_name, state_name, population_density FROM city WHERE state_name = :sn  ORDER BY name;
+
+		EXEC SQL OPEN cursor_city_show;
+
+		while (true) {
+			EXEC SQL FETCH cursor_city_show INTO  :n, :s, :ln, :pd;
+
+			if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+				break;
+			}
+
+			cout << endl;
+			cout << "Название Города: " << n << endl;
+			cout << "Название страны АЕ: " << sn << endl;
+			cout << "Название страны: " << s << endl;
+			cout << "ФИО лидера: " << ln << endl;
+			cout << "Количество населения: " << pd << endl;
+			cout << endl;
+		}
+
+		EXEC SQL CLOSE cursor_city_show;
+		return;
+
+}
+
 void show_city() {
-	cout << "Введите название Города:\n";
+	cout << "Введите название Города:" << endl;
   string tmpname;
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
 	EXEC SQL BEGIN DECLARE SECTION;
   const char* n = name;
+	char s [256];
   char ln [256];
-	char s [256] ;
-  char sn [256] ;
-  int pd ;
+  char sn [256];
+  int pd = -1;
 
 	EXEC SQL END DECLARE SECTION;
 
-	EXEC SQL SELECT name, country_name, leader_name, state_name, population_density INTO :n, :s, :ln, :sn, :pd FROM city WHERE name = :n;
 
-	cout << endl;
-	cout << "Название Города: " << n << endl;
-	cout << "Название страны АЕ: " << sn << endl;
-  cout << "Название страны: " << s << endl;
-  cout << "ФИО лидера: " << ln << endl;
-  cout << "Количество населения: " << pd << endl;
-	cout << endl;
-	return;
+		EXEC SQL DECLARE cursor_city_search CURSOR FOR
+			SELECT  country_name, leader_name, state_name, population_density FROM city WHERE name = :n  ORDER BY name;
+
+		EXEC SQL OPEN cursor_city_search;
+
+		while (true) {
+			EXEC SQL FETCH cursor_city_search INTO  :s, :ln, :sn, :pd;
+
+			if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+				break;
+			}
+
+			cout << endl;
+			cout << "Название Города: " << n << endl;
+			cout << "Название страны АЕ: " << sn << endl;
+		  cout << "Название страны: " << s << endl;
+		  cout << "ФИО лидера: " << ln << endl;
+		  cout << "Количество населения: " << pd << endl;
+			cout << endl;
+		}
+
+		EXEC SQL CLOSE cursor_city_search;
+		return;
 }
 void update_city() {
 
@@ -95,25 +152,36 @@ void update_city() {
   const char* n = name;
   const char* ln = leader_name;
 	const char* s = country_name;
-  const char* sn = country_name;
+  const char* sn = state_name;
   int pd = population_density;
 
 	EXEC SQL END DECLARE SECTION;
-	EXEC SQL UPDATE city SET country_name = :s, leader_name = :ln, state_name = :sn, population_density = :pd WHERE name = :n;
-
+	EXEC SQL UPDATE city SET country_name = :s, leader_name = :ln, state_name = :sn, population_density = :pd  WHERE name = :n AND country_name = :s AND state_name = :sn;
 	EXEC SQL COMMIT;
 	return;
 }
 void delete_city() {
-  cout << "Введите название Города:" << endl;
+	cout << "Введите название Города:" << endl;
   string tmpname;
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название AE:" << endl;
+	string tmpstate_name;
+	cin >> tmpstate_name;
+	const char* state_name = tmpstate_name.c_str();
+
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	EXEC SQL BEGIN DECLARE SECTION;
 	const char* n = name;
+	const char* s = country_name;
+  const char* sn = state_name;
 	EXEC SQL END DECLARE SECTION;
-	EXEC SQL DELETE FROM city WHERE name = :n;
+	EXEC SQL DELETE FROM city WHERE name = :n AND country_name = :s AND state_name = :sn;
 	EXEC SQL COMMIT;
 	return;
 }
@@ -157,10 +225,11 @@ void menu_city(){
 	while (true) {
 		cout << "Меню управления Городами:" << endl;
 		cout << "1. Создать Город" << endl;
-		cout << "2. Найти Город" << endl;
+		cout << "2. Найти Город  по названию" << endl;
 		cout << "3. Модифицировать информацию об Городе" << endl;
 		cout << "4. Удалить Город" << endl;
 		cout << "5. Показать все Города" << endl;
+		cout << "6. Найти горад в АЕ" << endl;
 		cout << "0. Выйти" << endl;
 		int number;
 		cin >> number;
@@ -185,6 +254,9 @@ void menu_city(){
 				printTable_city();
 				break;
 			}
+			case 6: {
+				search_city();
+				break;}
 			case 0: {
 				return;
 			}

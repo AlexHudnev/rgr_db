@@ -83,7 +83,7 @@ void show_country() {
     
 	   
     
-    
+     
 
 	
 #line 43 "country.cpp"
@@ -99,7 +99,7 @@ void show_country() {
  int sq ;
  
 #line 47 "country.cpp"
- int pd ;
+ int pd = - 1 ;
 /* exec sql end declare section */
 #line 49 "country.cpp"
 
@@ -119,6 +119,9 @@ void show_country() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
 #line 51 "country.cpp"
 
+
+	if (pd < 0)
+	{cout << "Ничего не найдено" << endl; return;}
 
 	cout << endl;
 	cout << "Название: " << n << endl;
@@ -160,22 +163,22 @@ void update_country() {
      
 
 	
-#line 86 "country.cpp"
+#line 89 "country.cpp"
  const char * n = name ;
  
-#line 87 "country.cpp"
+#line 90 "country.cpp"
  const char * ln = leader_name ;
  
-#line 88 "country.cpp"
+#line 91 "country.cpp"
  const char * s = state_device ;
  
-#line 89 "country.cpp"
+#line 92 "country.cpp"
  int sq = square ;
  
-#line 90 "country.cpp"
+#line 93 "country.cpp"
  int pd = population_density ;
 /* exec sql end declare section */
-#line 92 "country.cpp"
+#line 95 "country.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update country set state_device = $1  , leader_name = $2  , square = $3  , population_density = $4  where name = $5 ", 
 	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
@@ -188,11 +191,11 @@ void update_country() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 93 "country.cpp"
+#line 96 "country.cpp"
 
 
 	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 95 "country.cpp"
+#line 98 "country.cpp"
 
 	return;
 }
@@ -205,18 +208,18 @@ void delete_country() {
 	/* exec sql begin declare section */
 	    
 	
-#line 105 "country.cpp"
+#line 108 "country.cpp"
  const char * n = name ;
 /* exec sql end declare section */
-#line 106 "country.cpp"
+#line 109 "country.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from country where name = $1 ", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 107 "country.cpp"
+#line 110 "country.cpp"
 
 	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 108 "country.cpp"
+#line 111 "country.cpp"
 
 	return;
 }
@@ -230,31 +233,31 @@ void printTable_country() {
 
 
 	
-#line 113 "country.cpp"
+#line 116 "country.cpp"
  char n [ 256 ] ;
  
-#line 114 "country.cpp"
+#line 117 "country.cpp"
  char ln [ 256 ] ;
  
-#line 115 "country.cpp"
+#line 118 "country.cpp"
  char s [ 256 ] ;
  
-#line 116 "country.cpp"
+#line 119 "country.cpp"
  int sq ;
  
-#line 117 "country.cpp"
+#line 120 "country.cpp"
  int pd ;
 /* exec sql end declare section */
-#line 120 "country.cpp"
+#line 123 "country.cpp"
 
 
 
 	/* declare cursor cursor for select name , state_device , leader_name , square , population_density from country order by name */
-#line 124 "country.cpp"
+#line 127 "country.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor cursor for select name , state_device , leader_name , square , population_density from country order by name", ECPGt_EOIT, ECPGt_EORT);}
-#line 126 "country.cpp"
+#line 129 "country.cpp"
 
 
 	while (true) {
@@ -269,7 +272,7 @@ void printTable_country() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 129 "country.cpp"
+#line 132 "country.cpp"
 
 
 		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
@@ -286,7 +289,7 @@ void printTable_country() {
 	}
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor", ECPGt_EOIT, ECPGt_EORT);}
-#line 144 "country.cpp"
+#line 147 "country.cpp"
 
 	return;
 	return;
