@@ -44,11 +44,14 @@ void show_country() {
   char ln [256];
 	char s [256] ;
   int sq ;
-  int pd ;
+  int pd = -1;
 
 	EXEC SQL END DECLARE SECTION;
 
 	EXEC SQL SELECT name, state_device, leader_name, square, population_density INTO :n, :s, :ln, :sq, :pd FROM country WHERE name = :n;
+
+	if (pd < 0)
+	{cout << "Ничего не найдено" << endl; return;}
 
 	cout << endl;
 	cout << "Название: " << n << endl;

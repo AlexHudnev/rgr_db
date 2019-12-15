@@ -77,54 +77,71 @@ void create_city() {
 	return;
 }
 void show_city() {
-	cout << "Введите название Города:\n";
+	cout << "Введите название Города:" << endl;
   string tmpname;
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название AE:" << endl;
+	string tmpstate_name;
+	cin >> tmpstate_name;
+	const char* state_name = tmpstate_name.c_str();
+
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	/* exec sql begin declare section */
       
     
-	   
+	    
+      
      
-    
 
 	
-#line 47 "city.cpp"
+#line 57 "city.cpp"
  const char * n = name ;
  
-#line 48 "city.cpp"
+#line 58 "city.cpp"
  char ln [ 256 ] ;
  
-#line 49 "city.cpp"
- char s [ 256 ] ;
+#line 59 "city.cpp"
+ const char * s = country_name ;
  
-#line 50 "city.cpp"
- char sn [ 256 ] ;
+#line 60 "city.cpp"
+ const char * sn = state_name ;
  
-#line 51 "city.cpp"
- int pd ;
+#line 61 "city.cpp"
+ int pd = - 1 ;
 /* exec sql end declare section */
-#line 53 "city.cpp"
+#line 63 "city.cpp"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select name , country_name , leader_name , state_name , population_density from city where name = $1 ", 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select name , country_name , leader_name , state_name , population_density from city where name = $1  and country_name = $2  and state_name = $3 ", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,&(sn),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
-	ECPGt_char,(s),(long)256,(long)1,(256)*sizeof(char), 
+	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(ln),(long)256,(long)1,(256)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
-	ECPGt_char,(sn),(long)256,(long)1,(256)*sizeof(char), 
+	ECPGt_char,&(sn),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 55 "city.cpp"
+#line 65 "city.cpp"
 
 
-	cout << endl;
+  if (pd < 0)
+	{cout << "Ничего не найдено" << endl; return;}
+
+ 	cout << endl;
 	cout << "Название Города: " << n << endl;
 	cout << "Название страны АЕ: " << sn << endl;
   cout << "Название страны: " << s << endl;
@@ -169,24 +186,24 @@ void update_city() {
      
 
 	
-#line 95 "city.cpp"
+#line 108 "city.cpp"
  const char * n = name ;
  
-#line 96 "city.cpp"
+#line 109 "city.cpp"
  const char * ln = leader_name ;
  
-#line 97 "city.cpp"
+#line 110 "city.cpp"
  const char * s = country_name ;
  
-#line 98 "city.cpp"
+#line 111 "city.cpp"
  const char * sn = country_name ;
  
-#line 99 "city.cpp"
+#line 112 "city.cpp"
  int pd = population_density ;
 /* exec sql end declare section */
-#line 101 "city.cpp"
+#line 114 "city.cpp"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update city set country_name = $1  , leader_name = $2  , state_name = $3  , population_density = $4  where name = $5 ", 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update city set country_name = $1  , leader_name = $2  , state_name = $3  , population_density = $4  where name = $5  and country_name = $6  and state_name = $7 ", 
 	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(ln),(long)0,(long)1,(1)*sizeof(char), 
@@ -196,36 +213,61 @@ void update_city() {
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,&(sn),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 102 "city.cpp"
-
+#line 115 "city.cpp"
 
 	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 104 "city.cpp"
+#line 116 "city.cpp"
 
 	return;
 }
 void delete_city() {
-  cout << "Введите название Города:" << endl;
+	cout << "Введите название Города:" << endl;
   string tmpname;
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название AE:" << endl;
+	string tmpstate_name;
+	cin >> tmpstate_name;
+	const char* state_name = tmpstate_name.c_str();
+
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	/* exec sql begin declare section */
 	    
+	    
+      
 	
-#line 114 "city.cpp"
+#line 136 "city.cpp"
  const char * n = name ;
+ 
+#line 137 "city.cpp"
+ const char * s = country_name ;
+ 
+#line 138 "city.cpp"
+ const char * sn = state_name ;
 /* exec sql end declare section */
-#line 115 "city.cpp"
+#line 139 "city.cpp"
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from city where name = $1 ", 
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from city where name = $1  and country_name = $2  and state_name = $3 ", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
+	ECPGt_char,&(sn),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 116 "city.cpp"
+#line 140 "city.cpp"
 
 	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 117 "city.cpp"
+#line 141 "city.cpp"
 
 	return;
 }
@@ -239,31 +281,31 @@ void printTable_city() {
 
 
 	
-#line 122 "city.cpp"
+#line 146 "city.cpp"
  char n [ 256 ] ;
  
-#line 123 "city.cpp"
+#line 147 "city.cpp"
  char ln [ 256 ] ;
  
-#line 124 "city.cpp"
+#line 148 "city.cpp"
  char s [ 256 ] ;
  
-#line 125 "city.cpp"
+#line 149 "city.cpp"
  char sn [ 256 ] ;
  
-#line 126 "city.cpp"
+#line 150 "city.cpp"
  int pd ;
 /* exec sql end declare section */
-#line 129 "city.cpp"
+#line 153 "city.cpp"
 
 
 
 	/* declare cursor_city cursor for select name , country_name , leader_name , state_name , population_density from city order by name */
-#line 133 "city.cpp"
+#line 157 "city.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_city cursor for select name , country_name , leader_name , state_name , population_density from city order by name", ECPGt_EOIT, ECPGt_EORT);}
-#line 135 "city.cpp"
+#line 159 "city.cpp"
 
 
 	while (true) {
@@ -278,7 +320,7 @@ void printTable_city() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 138 "city.cpp"
+#line 162 "city.cpp"
 
 
 		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
@@ -295,7 +337,7 @@ void printTable_city() {
 	}
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_city", ECPGt_EOIT, ECPGt_EORT);}
-#line 153 "city.cpp"
+#line 177 "city.cpp"
 
 	return;
 }

@@ -40,16 +40,25 @@ void show_state() {
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	EXEC SQL BEGIN DECLARE SECTION;
   const char* n = name;
   char ln [256];
-	char s [256] ;
+	const char* s = country_name;
   int sq ;
-  int pd ;
+  int pd = -1;
 
 	EXEC SQL END DECLARE SECTION;
 
-	EXEC SQL SELECT name, country_name, leader_name, square, population_density INTO :n, :s, :ln, :sq, :pd FROM state WHERE name = :n;
+	EXEC SQL SELECT name, country_name, leader_name, square, population_density INTO :n, :s, :ln, :sq, :pd FROM state WHERE name = :n AND country_name = :s;
+
+
+	if (pd < 0)
+	{cout << "Ничего не найдено" << endl; return;}
 
 	cout << endl;
 	cout << "Название АЕ: " << n << endl;
@@ -91,7 +100,7 @@ void update_state() {
   int pd = population_density;
 
 	EXEC SQL END DECLARE SECTION;
-	EXEC SQL UPDATE state SET country_name = :s, leader_name = :ln, square = :sq, population_density = :pd WHERE name = :n;
+	EXEC SQL UPDATE state SET country_name = :s, leader_name = :ln, square = :sq, population_density = :pd WHERE name = :n AND country_name = :s;
 
 	EXEC SQL COMMIT;
 	return;
@@ -102,10 +111,16 @@ void delete_state() {
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	EXEC SQL BEGIN DECLARE SECTION;
 	const char* n = name;
+	const char* s = country_name;
 	EXEC SQL END DECLARE SECTION;
-	EXEC SQL DELETE FROM state WHERE name = :n;
+	EXEC SQL DELETE FROM state WHERE name = :n AND country_name = :s;
 	EXEC SQL COMMIT;
 	return;
 }
@@ -143,7 +158,6 @@ void printTable_state() {
 	}
 
 	EXEC SQL CLOSE cursor_state;
-	return;
 	return;
 }
 void menu_state(){

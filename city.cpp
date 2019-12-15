@@ -38,23 +38,36 @@ void create_city() {
 	return;
 }
 void show_city() {
-	cout << "Введите название Города:\n";
+	cout << "Введите название Города:" << endl;
   string tmpname;
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название AE:" << endl;
+	string tmpstate_name;
+	cin >> tmpstate_name;
+	const char* state_name = tmpstate_name.c_str();
+
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	EXEC SQL BEGIN DECLARE SECTION;
   const char* n = name;
   char ln [256];
-	char s [256] ;
-  char sn [256] ;
-  int pd ;
+	const char* s = country_name;
+  const char* sn = state_name;
+  int pd = -1;
 
 	EXEC SQL END DECLARE SECTION;
 
-	EXEC SQL SELECT name, country_name, leader_name, state_name, population_density INTO :n, :s, :ln, :sn, :pd FROM city WHERE name = :n;
+	EXEC SQL SELECT name, country_name, leader_name, state_name, population_density INTO :n, :s, :ln, :sn, :pd FROM city WHERE name = :n AND country_name = :s AND state_name = :sn;
 
-	cout << endl;
+  if (pd < 0)
+	{cout << "Ничего не найдено" << endl; return;}
+
+ 	cout << endl;
 	cout << "Название Города: " << n << endl;
 	cout << "Название страны АЕ: " << sn << endl;
   cout << "Название страны: " << s << endl;
@@ -99,21 +112,32 @@ void update_city() {
   int pd = population_density;
 
 	EXEC SQL END DECLARE SECTION;
-	EXEC SQL UPDATE city SET country_name = :s, leader_name = :ln, state_name = :sn, population_density = :pd WHERE name = :n;
-
+	EXEC SQL UPDATE city SET country_name = :s, leader_name = :ln, state_name = :sn, population_density = :pd  WHERE name = :n AND country_name = :s AND state_name = :sn;
 	EXEC SQL COMMIT;
 	return;
 }
 void delete_city() {
-  cout << "Введите название Города:" << endl;
+	cout << "Введите название Города:" << endl;
   string tmpname;
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
+	cout << "Введите название AE:" << endl;
+	string tmpstate_name;
+	cin >> tmpstate_name;
+	const char* state_name = tmpstate_name.c_str();
+
+	cout << "Введите название страны:" << endl;
+  string tmpcountry_name;
+  cin >> tmpcountry_name;
+  const char* country_name = tmpcountry_name.c_str();
+
 	EXEC SQL BEGIN DECLARE SECTION;
 	const char* n = name;
+	const char* s = country_name;
+  const char* sn = state_name;
 	EXEC SQL END DECLARE SECTION;
-	EXEC SQL DELETE FROM city WHERE name = :n;
+	EXEC SQL DELETE FROM city WHERE name = :n AND country_name = :s AND state_name = :sn;
 	EXEC SQL COMMIT;
 	return;
 }
