@@ -182,7 +182,7 @@ void menu() {
 int main() {
 	set_error_handler();
 
-	connectionToDb("localhost", "rgr_db", "alex", "1111");
+	connectionToDb("localhost", "rgr", "alex", "1111");
 
 	menu();
 

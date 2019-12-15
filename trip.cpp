@@ -94,21 +94,33 @@ void show_trip() {
 
 	EXEC SQL END DECLARE SECTION;
 
-	EXEC SQL SELECT start_country_name, start_state_name, start_city, finish_country_name, finish_state_name, finish_city, transport_type, date, passenger_passport_id, transport_route_number INTO :scn, :ssn, :sc, :fcn, :fsn, :fc, :tt, :d, :pid, :trn FROM trip WHERE passenger_passport_id = :pid AND transport_route_number = :trn AND date = :d;
+	EXEC SQL DECLARE cursor_trip_show CURSOR FOR
+		SELECT  start_country_name, start_state_name, start_city, finish_country_name, finish_state_name, finish_city, transport_type  FROM trip WHERE passenger_passport_id = :pid AND transport_route_number = :trn AND date = :d ORDER BY date;
 
+	EXEC SQL OPEN cursor_trip_show;
 
- 	cout << endl;
-	cout << " Название страны отправления:" << scn << endl;
-	cout << " Название AE отправления:" << ssn << endl;
-	cout << " Название Города отправления:" << sc << endl;
-	cout << " Название страны прибытия:" << fcn << endl;
-	cout << " Название AE прибытия:" << fsn << endl;
-	cout << " Название Города прибытия:"<< fc << endl;
-	cout << " Вид транспорта:" << tt <<endl;
-	cout << " Дата поездки" << d <<endl;
-	cout << " Номер паспорта:" << pid << endl;
-	cout << " Номер маршрута:" << trn <<  endl;
-	cout << endl;
+	while (true) {
+		EXEC SQL FETCH cursor_trip_show INTO :scn, :ssn, :sc, :fcn, :fsn, :fc, :tt;
+
+		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+			break;
+		}
+
+		cout << endl;
+		cout << " Название страны отправления:" << scn << endl;
+		cout << " Название AE отправления:" << ssn << endl;
+		cout << " Название Города отправления:" << sc << endl;
+		cout << " Название страны прибытия:" << fcn << endl;
+		cout << " Название AE прибытия:" << fsn << endl;
+		cout << " Название Города прибытия:"<< fc << endl;
+		cout << " Вид транспорта:" << tt <<endl;
+		cout << " Дата поездки" << d <<endl;
+		cout << " Номер паспорта:" << pid << endl;
+		cout << " Номер маршрута:" << trn <<  endl;
+		cout << endl;
+	}
+
+	EXEC SQL CLOSE cursor_trip_show;
 	return;
 }
 void update_trip() {

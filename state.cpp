@@ -40,33 +40,38 @@ void show_state() {
   cin >> tmpname;
   const char* name = tmpname.c_str();
 
-	cout << "Введите название страны:" << endl;
-  string tmpcountry_name;
-  cin >> tmpcountry_name;
-  const char* country_name = tmpcountry_name.c_str();
-
 	EXEC SQL BEGIN DECLARE SECTION;
-  const char* n = name;
+	const char* n = name;
   char ln [256];
-	const char* s = country_name;
-  int sq ;
-  int pd = -1;
+  char s [256] ;
+  int sq;
+  int pd;
 
 	EXEC SQL END DECLARE SECTION;
 
-	EXEC SQL SELECT name, country_name, leader_name, square, population_density INTO :n, :s, :ln, :sq, :pd FROM state WHERE name = :n AND country_name = :s;
 
+	EXEC SQL DECLARE cursor_state_find CURSOR FOR
+		SELECT  country_name, leader_name, square, population_density FROM state WHERE name = :n ORDER BY name;
 
-	if (pd < 0)
-	{cout << "Ничего не найдено" << endl; return;}
+	EXEC SQL OPEN cursor_state_find;
 
-	cout << endl;
-	cout << "Название АЕ: " << n << endl;
-  cout << "Название страны: " << s << endl;
-  cout << "ФИО лидера: " << ln << endl;
-  cout << "Площадь: " << sq << endl;
-  cout << "Количество населения: " << pd << endl;
-	cout << endl;
+	while (true) {
+		EXEC SQL FETCH cursor_state_find INTO :s, :ln, :sq, :pd;
+
+		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+			break;
+		}
+
+    cout << endl;
+  	cout << "Название АЕ: " << n << endl;
+    cout << "Название страны: " << s << endl;
+    cout << "ФИО лидера: " << ln << endl;
+    cout << "Площадь: " << sq << endl;
+    cout << "Количество населения: " << pd << endl;
+  	cout << endl;
+	}
+
+	EXEC SQL CLOSE cursor_state_find;
 	return;
 }
 void update_state() {
@@ -164,7 +169,7 @@ void menu_state(){
 	while (true) {
 		cout << "Меню управления Административными единицами (АЕ):" << endl;
 		cout << "1. Создать АЕ" << endl;
-		cout << "2. Найти АЕ" << endl;
+		cout << "2. Найти АЕ по названию" << endl;
 		cout << "3. Модифицировать информацию об АЕ" << endl;
 		cout << "4. Удалить АЕ" << endl;
 		cout << "5. Показать все АЕ" << endl;
