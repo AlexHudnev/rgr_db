@@ -6,6 +6,9 @@
 /* End of automatic include section */
 
 #line 1 "state.cpp"
+/* exec sql whenever sqlerror  sqlprint ; */
+#line 1 "state.cpp"
+
 
 void create_state() {
 	cout << "Введите название АЕ:" << endl;
@@ -38,22 +41,22 @@ void create_state() {
      
 
 	
-#line 26 "state.cpp"
+#line 27 "state.cpp"
  const char * n = name ;
  
-#line 27 "state.cpp"
+#line 28 "state.cpp"
  const char * ln = leader_name ;
  
-#line 28 "state.cpp"
+#line 29 "state.cpp"
  const char * s = country_name ;
  
-#line 29 "state.cpp"
+#line 30 "state.cpp"
  int sq = square ;
  
-#line 30 "state.cpp"
+#line 31 "state.cpp"
  int pd = population_density ;
 /* exec sql end declare section */
-#line 32 "state.cpp"
+#line 33 "state.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into state ( name , country_name , leader_name , square , population_density ) values ( $1  , $2  , $3  , $4  , $5  )", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
@@ -65,11 +68,17 @@ void create_state() {
 	ECPGt_int,&(sq),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 33 "state.cpp"
-
-	{ ECPGtrans(__LINE__, NULL, "commit");}
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
 #line 34 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 34 "state.cpp"
+
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 35 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 35 "state.cpp"
 
 	return;
 }
@@ -87,36 +96,39 @@ void show_state() {
    
 
 	
-#line 44 "state.cpp"
+#line 45 "state.cpp"
  const char * n = name ;
  
-#line 45 "state.cpp"
+#line 46 "state.cpp"
  char ln [ 256 ] ;
  
-#line 46 "state.cpp"
+#line 47 "state.cpp"
  char s [ 256 ] ;
  
-#line 47 "state.cpp"
+#line 48 "state.cpp"
  int sq ;
  
-#line 48 "state.cpp"
+#line 49 "state.cpp"
  int pd ;
 /* exec sql end declare section */
-#line 50 "state.cpp"
+#line 51 "state.cpp"
 
 
 
 	ECPGset_var( 0, &( n ), __LINE__);\
  /* declare cursor_state_find cursor for select country_name , leader_name , square , population_density from state where name = $1  order by name */
-#line 54 "state.cpp"
+#line 55 "state.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_state_find cursor for select country_name , leader_name , square , population_density from state where name = $1  order by name", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 56 "state.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 57 "state.cpp"
 
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 57 "state.cpp"
 
+  int count = 0;
 	while (true) {
 		{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "fetch cursor_state_find", ECPGt_EOIT, 
 	ECPGt_char,(s),(long)256,(long)1,(256)*sizeof(char), 
@@ -126,14 +138,19 @@ void show_state() {
 	ECPGt_int,&(sq),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 59 "state.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 60 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 60 "state.cpp"
 
 
-		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+		if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+		{
+			if (count == 0) cout << "Не найдено\n";
 			break;
 		}
-
+    count ++ ;
     cout << endl;
   	cout << "Название АЕ: " << n << endl;
     cout << "Название страны: " << s << endl;
@@ -143,8 +160,11 @@ void show_state() {
   	cout << endl;
 	}
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_state_find", ECPGt_EOIT, ECPGt_EORT);}
-#line 74 "state.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_state_find", ECPGt_EOIT, ECPGt_EORT);
+#line 77 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 77 "state.cpp"
 
 	return;
 }
@@ -179,22 +199,22 @@ void update_state() {
      
 
 	
-#line 101 "state.cpp"
+#line 104 "state.cpp"
  const char * n = name ;
  
-#line 102 "state.cpp"
+#line 105 "state.cpp"
  const char * ln = leader_name ;
  
-#line 103 "state.cpp"
+#line 106 "state.cpp"
  const char * s = country_name ;
  
-#line 104 "state.cpp"
+#line 107 "state.cpp"
  int sq = square ;
  
-#line 105 "state.cpp"
+#line 108 "state.cpp"
  int pd = population_density ;
 /* exec sql end declare section */
-#line 107 "state.cpp"
+#line 110 "state.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update state set country_name = $1  , leader_name = $2  , square = $3  , population_density = $4  where name = $5  and country_name = $6 ", 
 	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
@@ -208,12 +228,18 @@ void update_state() {
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 108 "state.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 111 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 111 "state.cpp"
 
 
-	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 110 "state.cpp"
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 113 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 113 "state.cpp"
 
 	return;
 }
@@ -232,23 +258,29 @@ void delete_state() {
 	    
 	    
 	
-#line 125 "state.cpp"
+#line 128 "state.cpp"
  const char * n = name ;
  
-#line 126 "state.cpp"
+#line 129 "state.cpp"
  const char * s = country_name ;
 /* exec sql end declare section */
-#line 127 "state.cpp"
+#line 130 "state.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from state where name = $1  and country_name = $2 ", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(s),(long)0,(long)1,(1)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 128 "state.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 131 "state.cpp"
 
-	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 129 "state.cpp"
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 131 "state.cpp"
+
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 132 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 132 "state.cpp"
 
 	return;
 }
@@ -262,31 +294,34 @@ void printTable_state() {
 
 
 	
-#line 134 "state.cpp"
+#line 137 "state.cpp"
  char n [ 256 ] ;
  
-#line 135 "state.cpp"
+#line 138 "state.cpp"
  char ln [ 256 ] ;
  
-#line 136 "state.cpp"
+#line 139 "state.cpp"
  char s [ 256 ] ;
  
-#line 137 "state.cpp"
+#line 140 "state.cpp"
  int sq ;
  
-#line 138 "state.cpp"
+#line 141 "state.cpp"
  int pd ;
 /* exec sql end declare section */
-#line 141 "state.cpp"
+#line 144 "state.cpp"
 
 
 
 	/* declare cursor_state cursor for select name , country_name , leader_name , square , population_density from state order by name */
-#line 145 "state.cpp"
+#line 148 "state.cpp"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_state cursor for select name , country_name , leader_name , square , population_density from state order by name", ECPGt_EOIT, ECPGt_EORT);}
-#line 147 "state.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_state cursor for select name , country_name , leader_name , square , population_density from state order by name", ECPGt_EOIT, ECPGt_EORT);
+#line 150 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 150 "state.cpp"
 
 
 	while (true) {
@@ -300,8 +335,11 @@ void printTable_state() {
 	ECPGt_int,&(sq),(long)1,(long)1,sizeof(int), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pd),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 150 "state.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 153 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 153 "state.cpp"
 
 
 		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
@@ -317,8 +355,11 @@ void printTable_state() {
   	cout << endl;
 	}
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_state", ECPGt_EOIT, ECPGt_EORT);}
-#line 165 "state.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_state", ECPGt_EOIT, ECPGt_EORT);
+#line 168 "state.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 168 "state.cpp"
 
 	return;
 }

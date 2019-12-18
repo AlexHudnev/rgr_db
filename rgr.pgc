@@ -2,15 +2,8 @@
 EXEC SQL include sqlca;
 using namespace std;
 
-void set_error_handler()
-{
-    EXEC SQL WHENEVER SQLERROR CALL error_handler();
-}
-void error_handler()
-{
-	cout << "***** Error : " << sqlca.sqlerrm.sqlerrmc;
-	exit(-1);
-}
+EXEC SQL WHENEVER SQLERROR SQLPRINT;
+
 void connectionToDb(const char* host, const char* dbname, const char* user, const char* pass) {
 	EXEC SQL BEGIN DECLARE SECTION;
 		char target[256];
@@ -81,7 +74,7 @@ void menu() {
 }
 
 int main() {
-	set_error_handler();
+	
 
 	connectionToDb("localhost", "rgr", "alex", "1111");
 

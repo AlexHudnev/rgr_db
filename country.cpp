@@ -1,3 +1,5 @@
+EXEC SQL WHENEVER SQLERROR SQLPRINT;
+
 void create_country() {
 	cout << "Введите название страны:" << endl;
   string tmpname;
@@ -44,14 +46,17 @@ void show_country() {
   char ln [256];
 	char s [256] ;
   int sq ;
-  int pd = -1;
+  int pd ;
 
 	EXEC SQL END DECLARE SECTION;
 
-	EXEC SQL SELECT name, state_device, leader_name, square, population_density INTO :n, :s, :ln, :sq, :pd FROM country WHERE name = :n;
+	EXEC SQL SELECT  state_device, leader_name, square, population_density INTO  :s, :ln, :sq, :pd FROM country WHERE name = :n;
 
-	if (pd < 0)
-	{cout << "Ничего не найдено" << endl; return;}
+	if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+	{
+		cout << "Не найдено\n";
+		return;
+	}
 
 	cout << endl;
 	cout << "Название: " << n << endl;
@@ -62,6 +67,54 @@ void show_country() {
 	cout << endl;
 	return;
 }
+
+void full_stat_country() {
+	cout << "Введите название страны:\n";
+  string tmpname;
+  cin >> tmpname;
+  const char* name = tmpname.c_str();
+
+	EXEC SQL BEGIN DECLARE SECTION;
+  const char* n = name;
+  char ln [256];
+	char s [256] ;
+  int sq ;
+  int pd ;
+	int state_count;
+	int city_count;
+	int active_pass;
+
+	EXEC SQL END DECLARE SECTION;
+
+	EXEC SQL SELECT state_device, leader_name, square, population_density, (WITH pass AS (SELECT passenger_passport_id FROM trip WHERE start_country_name = :n OR finish_country_name = :n)
+	  SELECT COUNT(*) from pass) INTO :s, :ln, :sq, :pd, :active_pass FROM country WHERE name = :n;
+
+	EXEC SQL SELECT COUNT(*)  INTO :state_count FROM state WHERE country_name = :n;
+
+	EXEC SQL SELECT COUNT(*)  INTO :city_count FROM city WHERE country_name = :n;
+
+	EXEC SQL SELECT COUNT(*)  INTO :city_count FROM city WHERE country_name = :n;
+
+
+	if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+	{
+		cout << "Не найдено\n";
+		return;
+	}
+
+	cout << endl;
+	cout << "Название: " << n << endl;
+  cout << "Вид гос устройства: " << s << endl;
+  cout << "ФИО лидера: " << ln << endl;
+  cout << "Площадь: " << sq << endl;
+  cout << "Количество населения: " << pd << endl;
+	cout << "Количество АЕ: " << state_count << endl;
+	cout << "Количество городов: " << city_count << endl;
+	cout << "Количество активных пассажиров " << active_pass << endl;
+	cout << endl;
+	return;
+}
+
 void update_country() {
 
   cout << "Введите название страны:" << endl;
@@ -156,6 +209,7 @@ void menu_country(){
 		cout << "3. Модифицировать информацию о стране" << endl;
 		cout << "4. Удалить страну" << endl;
 		cout << "5. Показать все страны" << endl;
+		cout << "6. Расширенная информация о стране" << endl;
 		cout << "0. Выйти" << endl;
 		int number;
 		cin >> number;
@@ -178,6 +232,10 @@ void menu_country(){
 			}
 			case 5: {
 				printTable_country();
+				break;
+			}
+			case 6: {
+				full_stat_country();
 				break;
 			}
 			case 0: {

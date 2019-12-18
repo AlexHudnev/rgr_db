@@ -6,6 +6,9 @@
 /* End of automatic include section */
 
 #line 1 "trip.cpp"
+/* exec sql whenever sqlerror  sqlprint ; */
+#line 1 "trip.cpp"
+
 
 void create_trip() {
 	cout << "Введите название страны отправления:" << endl;
@@ -71,37 +74,37 @@ void create_trip() {
 	     
 
 	
-#line 54 "trip.cpp"
+#line 55 "trip.cpp"
  const char * scn = start_country_name ;
  
-#line 55 "trip.cpp"
+#line 56 "trip.cpp"
  const char * ssn = start_state_name ;
  
-#line 56 "trip.cpp"
+#line 57 "trip.cpp"
  const char * sc = start_city ;
  
-#line 57 "trip.cpp"
+#line 58 "trip.cpp"
  const char * fcn = finish_country_name ;
  
-#line 58 "trip.cpp"
+#line 59 "trip.cpp"
  const char * fsn = finish_state_name ;
  
-#line 59 "trip.cpp"
+#line 60 "trip.cpp"
  const char * fc = finish_city ;
  
-#line 60 "trip.cpp"
+#line 61 "trip.cpp"
  const char * tt = transport_type ;
  
-#line 61 "trip.cpp"
+#line 62 "trip.cpp"
  const char * d = date ;
  
-#line 62 "trip.cpp"
+#line 63 "trip.cpp"
  unsigned long long pid = passenger_passport_id ;
  
-#line 63 "trip.cpp"
+#line 64 "trip.cpp"
  unsigned long long trn = transport_route_number ;
 /* exec sql end declare section */
-#line 65 "trip.cpp"
+#line 66 "trip.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into trip ( start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , transport_type , date , passenger_passport_id , transport_route_number ) values ( $1  , $2  , $3  , $4  , $5  , $6  , $7  , $8  , $9  , $10  )", 
 	ECPGt_char,&(scn),(long)0,(long)1,(1)*sizeof(char), 
@@ -123,11 +126,17 @@ void create_trip() {
 	ECPGt_unsigned_long_long,&(pid),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 66 "trip.cpp"
-
-	{ ECPGtrans(__LINE__, NULL, "commit");}
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
 #line 67 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 67 "trip.cpp"
+
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 68 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 68 "trip.cpp"
 
 	return;
 }
@@ -157,44 +166,44 @@ void show_trip() {
 	     
 
 	
-#line 84 "trip.cpp"
+#line 85 "trip.cpp"
  char scn [ 256 ] ;
  
-#line 85 "trip.cpp"
+#line 86 "trip.cpp"
  char ssn [ 256 ] ;
  
-#line 86 "trip.cpp"
+#line 87 "trip.cpp"
  char sc [ 256 ] ;
  
-#line 87 "trip.cpp"
+#line 88 "trip.cpp"
  char fcn [ 256 ] ;
  
-#line 88 "trip.cpp"
+#line 89 "trip.cpp"
  char fsn [ 256 ] ;
  
-#line 89 "trip.cpp"
+#line 90 "trip.cpp"
  char fc [ 256 ] ;
  
-#line 90 "trip.cpp"
+#line 91 "trip.cpp"
  char tt [ 256 ] ;
  
-#line 91 "trip.cpp"
+#line 92 "trip.cpp"
  const char * d = date ;
  
-#line 92 "trip.cpp"
+#line 93 "trip.cpp"
  unsigned long long pid = passenger_passport_id ;
  
-#line 93 "trip.cpp"
+#line 94 "trip.cpp"
  unsigned long long trn = transport_route_number ;
 /* exec sql end declare section */
-#line 95 "trip.cpp"
+#line 96 "trip.cpp"
 
 
 	ECPGset_var( 0, &( d ), __LINE__);\
  ECPGset_var( 1, &( trn ), __LINE__);\
  ECPGset_var( 2, &( pid ), __LINE__);\
  /* declare cursor_trip_show cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , transport_type from trip where passenger_passport_id = $1  and transport_route_number = $2  and date = $3  order by date */
-#line 98 "trip.cpp"
+#line 99 "trip.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_trip_show cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , transport_type from trip where passenger_passport_id = $1  and transport_route_number = $2  and date = $3  order by date", 
@@ -203,9 +212,13 @@ void show_trip() {
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(d),(long)0,(long)1,(1)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 100 "trip.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 101 "trip.cpp"
 
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 101 "trip.cpp"
+
+  int count = 0;
 
 	while (true) {
 		{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "fetch cursor_trip_show", ECPGt_EOIT, 
@@ -222,14 +235,19 @@ void show_trip() {
 	ECPGt_char,(fc),(long)256,(long)1,(256)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,(tt),(long)256,(long)1,(256)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 103 "trip.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 105 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 105 "trip.cpp"
 
 
-		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+		if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+		{
+			if ( count == 0) cout << "Не найдено\n";
 			break;
 		}
-
+    count ++;
 		cout << endl;
 		cout << " Название страны отправления:" << scn << endl;
 		cout << " Название AE отправления:" << ssn << endl;
@@ -244,8 +262,11 @@ void show_trip() {
 		cout << endl;
 	}
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_trip_show", ECPGt_EOIT, ECPGt_EORT);}
-#line 123 "trip.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_trip_show", ECPGt_EOIT, ECPGt_EORT);
+#line 127 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 127 "trip.cpp"
 
 	return;
 }
@@ -313,37 +334,37 @@ void update_trip() {
 
 
 	
-#line 177 "trip.cpp"
+#line 181 "trip.cpp"
  const char * scn = start_country_name ;
  
-#line 178 "trip.cpp"
+#line 182 "trip.cpp"
  const char * ssn = start_state_name ;
  
-#line 179 "trip.cpp"
+#line 183 "trip.cpp"
  const char * sc = start_city ;
  
-#line 180 "trip.cpp"
+#line 184 "trip.cpp"
  const char * fcn = finish_country_name ;
  
-#line 181 "trip.cpp"
+#line 185 "trip.cpp"
  const char * fsn = finish_state_name ;
  
-#line 182 "trip.cpp"
+#line 186 "trip.cpp"
  const char * fc = finish_city ;
  
-#line 183 "trip.cpp"
+#line 187 "trip.cpp"
  const char * tt = transport_type ;
  
-#line 184 "trip.cpp"
+#line 188 "trip.cpp"
  const char * d = date ;
  
-#line 185 "trip.cpp"
+#line 189 "trip.cpp"
  unsigned long long pid = passenger_passport_id ;
  
-#line 186 "trip.cpp"
+#line 190 "trip.cpp"
  unsigned long long trn = transport_route_number ;
 /* exec sql end declare section */
-#line 189 "trip.cpp"
+#line 193 "trip.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update trip set start_country_name = $1  , start_state_name = $2  , start_city = $3  , finish_country_name = $4  , finish_state_name = $5  , finish_city = $6  , transport_type = $7  , date = $8  , passenger_passport_id = $9  , transport_route_number = $10  where passenger_passport_id = $11  and transport_route_number = $12  and date = $13 ", 
 	ECPGt_char,&(scn),(long)0,(long)1,(1)*sizeof(char), 
@@ -371,12 +392,18 @@ void update_trip() {
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(d),(long)0,(long)1,(1)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 190 "trip.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 194 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 194 "trip.cpp"
 
 
-	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 192 "trip.cpp"
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 196 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 196 "trip.cpp"
 
 	return;
 }
@@ -398,16 +425,16 @@ void delete_trip() {
 	     
 	     
 	
-#line 209 "trip.cpp"
+#line 213 "trip.cpp"
  const char * d = date ;
  
-#line 210 "trip.cpp"
+#line 214 "trip.cpp"
  unsigned long long pid = passenger_passport_id ;
  
-#line 211 "trip.cpp"
+#line 215 "trip.cpp"
  unsigned long long trn = transport_route_number ;
 /* exec sql end declare section */
-#line 212 "trip.cpp"
+#line 216 "trip.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from trip where passenger_passport_id = $1  and transport_route_number = $2  and date = $3 ", 
 	ECPGt_unsigned_long_long,&(pid),(long)1,(long)1,sizeof(unsigned long long), 
@@ -415,11 +442,17 @@ void delete_trip() {
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_char,&(d),(long)0,(long)1,(1)*sizeof(char), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 213 "trip.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 217 "trip.cpp"
 
-	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 214 "trip.cpp"
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 217 "trip.cpp"
+
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 218 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 218 "trip.cpp"
 
 	return;
 }
@@ -436,45 +469,48 @@ void printTable_trip() {
 	    
 	    
 	
-#line 219 "trip.cpp"
+#line 223 "trip.cpp"
  char scn [ 256 ] ;
  
-#line 220 "trip.cpp"
+#line 224 "trip.cpp"
  char ssn [ 256 ] ;
  
-#line 221 "trip.cpp"
+#line 225 "trip.cpp"
  char sc [ 256 ] ;
  
-#line 222 "trip.cpp"
+#line 226 "trip.cpp"
  char fcn [ 256 ] ;
  
-#line 223 "trip.cpp"
+#line 227 "trip.cpp"
  char fsn [ 256 ] ;
  
-#line 224 "trip.cpp"
+#line 228 "trip.cpp"
  char fc [ 256 ] ;
  
-#line 225 "trip.cpp"
+#line 229 "trip.cpp"
  char tt [ 256 ] ;
  
-#line 226 "trip.cpp"
+#line 230 "trip.cpp"
  char d [ 256 ] ;
  
-#line 227 "trip.cpp"
+#line 231 "trip.cpp"
  unsigned long long pid ;
  
-#line 228 "trip.cpp"
+#line 232 "trip.cpp"
  unsigned long long trn ;
 /* exec sql end declare section */
-#line 229 "trip.cpp"
+#line 233 "trip.cpp"
 
 
 	/* declare cursor_trip cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , transport_type , date , passenger_passport_id , transport_route_number from trip order by date */
-#line 232 "trip.cpp"
+#line 236 "trip.cpp"
 
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_trip cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , transport_type , date , passenger_passport_id , transport_route_number from trip order by date", ECPGt_EOIT, ECPGt_EORT);}
-#line 234 "trip.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_trip cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , transport_type , date , passenger_passport_id , transport_route_number from trip order by date", ECPGt_EOIT, ECPGt_EORT);
+#line 238 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 238 "trip.cpp"
 
 
 	while (true) {
@@ -498,8 +534,11 @@ void printTable_trip() {
 	ECPGt_unsigned_long_long,&(pid),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 237 "trip.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 241 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 241 "trip.cpp"
 
 
 		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
@@ -520,8 +559,11 @@ void printTable_trip() {
 		cout << endl;
 	}
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_trip", ECPGt_EOIT, ECPGt_EORT);}
-#line 257 "trip.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_trip", ECPGt_EOIT, ECPGt_EORT);
+#line 261 "trip.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 261 "trip.cpp"
 
 	return;
 }

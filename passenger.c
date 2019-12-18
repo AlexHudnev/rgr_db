@@ -6,6 +6,9 @@
 /* End of automatic include section */
 
 #line 1 "passenger.cpp"
+/* exec sql whenever sqlerror  sqlprint ; */
+#line 1 "passenger.cpp"
+
 
 void create_passenger() {
 	cout << "Введите ФИО пассажира:" << endl;
@@ -21,23 +24,29 @@ void create_passenger() {
      
 
 	
-#line 12 "passenger.cpp"
+#line 13 "passenger.cpp"
  const char * n = name ;
  
-#line 13 "passenger.cpp"
+#line 14 "passenger.cpp"
  int pid = passport_id ;
 /* exec sql end declare section */
-#line 15 "passenger.cpp"
+#line 16 "passenger.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "insert into passenger ( name , passport_id ) values ( $1  , $2  )", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pid),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 16 "passenger.cpp"
-
-	{ ECPGtrans(__LINE__, NULL, "commit");}
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
 #line 17 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 17 "passenger.cpp"
+
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 18 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 18 "passenger.cpp"
 
 	return;
 }
@@ -50,13 +59,13 @@ void show_passenger() {
 	  
 
 	
-#line 25 "passenger.cpp"
+#line 26 "passenger.cpp"
  int pid = passport_id ;
  
-#line 26 "passenger.cpp"
+#line 27 "passenger.cpp"
  char n [ 256 ] ;
 /* exec sql end declare section */
-#line 28 "passenger.cpp"
+#line 29 "passenger.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "select name , passport_id from passenger where passport_id = $1 ", 
@@ -65,9 +74,18 @@ void show_passenger() {
 	ECPGt_char,(n),(long)256,(long)1,(256)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pid),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 30 "passenger.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 31 "passenger.cpp"
 
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 31 "passenger.cpp"
+
+
+	if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+	{
+		cout << "Не найдено\n";
+		return;
+	}
 
 	cout << endl;
 	cout << "ФИО: " << n << endl;
@@ -91,24 +109,30 @@ void update_passenger() {
      
 
 	
-#line 50 "passenger.cpp"
+#line 57 "passenger.cpp"
  const char * n = name ;
  
-#line 51 "passenger.cpp"
+#line 58 "passenger.cpp"
  int pid = passport_id ;
 /* exec sql end declare section */
-#line 53 "passenger.cpp"
+#line 60 "passenger.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "update passenger set name = $1  where passport_id = $2 ", 
 	ECPGt_char,&(n),(long)0,(long)1,(1)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pid),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 54 "passenger.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 61 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 61 "passenger.cpp"
 
 
-	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 56 "passenger.cpp"
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 63 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 63 "passenger.cpp"
 
 	return;
 }
@@ -119,18 +143,24 @@ void delete_passenger() {
 	/* exec sql begin declare section */
 	   
 	
-#line 64 "passenger.cpp"
+#line 71 "passenger.cpp"
  int pid = passport_id ;
 /* exec sql end declare section */
-#line 65 "passenger.cpp"
+#line 72 "passenger.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from passenger where passport_id = $1 ", 
 	ECPGt_int,&(pid),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 66 "passenger.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);
+#line 73 "passenger.cpp"
 
-	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 67 "passenger.cpp"
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 73 "passenger.cpp"
+
+	{ ECPGtrans(__LINE__, NULL, "commit");
+#line 74 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 74 "passenger.cpp"
 
 	return;
 }
@@ -141,28 +171,31 @@ void printTable_passenger() {
 
 
 	
-#line 72 "passenger.cpp"
+#line 79 "passenger.cpp"
  char n [ 256 ] ;
  
-#line 73 "passenger.cpp"
+#line 80 "passenger.cpp"
  int pid ;
 /* exec sql end declare section */
-#line 76 "passenger.cpp"
+#line 83 "passenger.cpp"
 
 
 
 	ECPGset_var( 0, &( pid ), __LINE__);\
  ECPGset_var( 1, ( n ), __LINE__);\
  /* declare cursor_passenger cursor for select name , passport_id from passenger order by name */
-#line 80 "passenger.cpp"
+#line 87 "passenger.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_passenger cursor for select name , passport_id from passenger order by name", ECPGt_EOIT, 
 	ECPGt_char,(n),(long)256,(long)1,(256)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pid),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 82 "passenger.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 89 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 89 "passenger.cpp"
 
 
 	while (true) {
@@ -174,8 +207,11 @@ void printTable_passenger() {
 	ECPGt_char,(n),(long)256,(long)1,(256)*sizeof(char), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_int,&(pid),(long)1,(long)1,sizeof(int), 
-	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 85 "passenger.cpp"
+	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);
+#line 92 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 92 "passenger.cpp"
 
 
 		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
@@ -188,8 +224,11 @@ void printTable_passenger() {
 		cout << endl;
 	}
 
-	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_passenger", ECPGt_EOIT, ECPGt_EORT);}
-#line 97 "passenger.cpp"
+	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_passenger", ECPGt_EOIT, ECPGt_EORT);
+#line 104 "passenger.cpp"
+
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 104 "passenger.cpp"
 
 	return;
 }

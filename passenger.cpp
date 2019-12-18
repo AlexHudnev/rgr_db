@@ -1,3 +1,4 @@
+EXEC SQL WHENEVER SQLERROR SQLPRINT;
 
 void create_passenger() {
 	cout << "Введите ФИО пассажира:" << endl;
@@ -28,6 +29,12 @@ void show_passenger() {
 	EXEC SQL END DECLARE SECTION;
 
 	EXEC SQL SELECT name, passport_id INTO :n, :pid FROM passenger WHERE passport_id = :pid;
+
+	if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+	{
+		cout << "Не найдено\n";
+		return;
+	}
 
 	cout << endl;
 	cout << "ФИО: " << n << endl;

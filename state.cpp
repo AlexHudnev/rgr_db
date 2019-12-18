@@ -1,3 +1,4 @@
+EXEC SQL WHENEVER SQLERROR SQLPRINT;
 
 void create_state() {
 	cout << "Введите название АЕ:" << endl;
@@ -54,14 +55,16 @@ void show_state() {
 		SELECT  country_name, leader_name, square, population_density FROM state WHERE name = :n ORDER BY name;
 
 	EXEC SQL OPEN cursor_state_find;
-
+  int count = 0;
 	while (true) {
 		EXEC SQL FETCH cursor_state_find INTO :s, :ln, :sq, :pd;
 
-		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+		if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+		{
+			if (count == 0) cout << "Не найдено\n";
 			break;
 		}
-
+    count ++ ;
     cout << endl;
   	cout << "Название АЕ: " << n << endl;
     cout << "Название страны: " << s << endl;

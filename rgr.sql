@@ -81,7 +81,7 @@ values('Индия', 'Монархия', 'Иван Иванов', 4314,31234);
 
 
 insert into country(name ,state_device,leader_name ,square ,population_density)
-values('Голандия', 'Монархия', 'Антон Грозный',412234,112334);
+values('Голандия', 'Монархия', 'Антон Грозный',412234,15);
 
 
 insert into state(name ,country_name,leader_name ,square ,population_density)
@@ -91,6 +91,11 @@ values('Забайкальский', 'Russsia', ' Грозный', 123434,126434
 insert into state(name ,country_name,leader_name ,square ,population_density)
 values('Тверская_область', 'Russsia', 'Иван G Грозный', 121234,26434);
 
+insert into state(name ,country_name,leader_name ,square ,population_density)
+values('ghgh', 'Голандия', 'ИванGГрозный', 121234,10);
+
+insert into city(name ,country_name,state_name, leader_name, population_density )
+values('Тверь', 'Голандия','ghgh', 'Иван', 1244);
 
 insert into city(name ,country_name,state_name, leader_name, population_density )
 values('Тверь', 'Russsia','Тверская_область', 'Иван', 1244);
@@ -138,11 +143,17 @@ values(4,'хз3', 'Russsia','Забайкальский','хз2', 'Russsia','З�
 insert into transport_route(number,start_city,start_country_name ,start_state_name,finish_city,finish_country_name,finish_state_name)
 values(5,'хз3', 'Russsia','Забайкальский','Торжок', 'Russsia','Тверская_область');
 
+insert into transport_route(number,start_city,start_country_name ,start_state_name,finish_city,finish_country_name,finish_state_name)
+values(6,'Тверь', 'Голандия','ghgh','Торжок', 'Russsia','Тверская_область');
+
 insert into trip(date, transport_type, passenger_passport_id, transport_route_number, start_city,start_country_name ,start_state_name,finish_city,finish_country_name,finish_state_name)
 values('2019-01-01','bus',1, 3,'Торжок', 'Russsia','Тверская_область','Тверь', 'Russsia','Тверская_область');
 
 insert into trip(date, transport_type, passenger_passport_id, transport_route_number, start_city,start_country_name ,start_state_name,finish_city,finish_country_name,finish_state_name)
-values('2019-01-02', 'bus', 1, 4, 'хз3', 'Russsia','Забайкальский','хз2', 'Russsia','Забайкальский');
+values('2019-01-02', 'bus', 2, 4, 'хз3', 'Russsia','Забайкальский','хз2', 'Russsia','Забайкальский');
+
+insert into trip(date, transport_type, passenger_passport_id, transport_route_number, start_city,start_country_name ,start_state_name,finish_city,finish_country_name,finish_state_name)
+values('2019-01-02', 'bus', 3, 6, 'Тверь', 'Голандия','ghgh','Торжок', 'Russsia','Тверская_область');
 
 insert into passenger(passport_id, name )
 values(1, 'Ivanow');

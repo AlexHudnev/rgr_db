@@ -166,7 +166,9 @@ void show_transport_route() {
 #line 73 "transport_route.cpp"
 
 
-		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+		if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+		{
+			cout << "Не найдено\n";
 			break;
 		}
 
@@ -181,7 +183,7 @@ void show_transport_route() {
 		cout << endl;
 	}
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_transport_route_show", ECPGt_EOIT, ECPGt_EORT);}
-#line 89 "transport_route.cpp"
+#line 91 "transport_route.cpp"
 
 	return;
 }
@@ -229,28 +231,28 @@ void delete_transport_route() {
 	    
 	     
 	
-#line 128 "transport_route.cpp"
+#line 130 "transport_route.cpp"
  const char * scn = start_country_name ;
  
-#line 129 "transport_route.cpp"
+#line 131 "transport_route.cpp"
  const char * ssn = start_state_name ;
  
-#line 130 "transport_route.cpp"
+#line 132 "transport_route.cpp"
  const char * sc = start_city ;
  
-#line 131 "transport_route.cpp"
+#line 133 "transport_route.cpp"
  const char * fcn = finish_country_name ;
  
-#line 132 "transport_route.cpp"
+#line 134 "transport_route.cpp"
  const char * fsn = finish_state_name ;
  
-#line 133 "transport_route.cpp"
+#line 135 "transport_route.cpp"
  const char * fc = finish_city ;
  
-#line 134 "transport_route.cpp"
+#line 136 "transport_route.cpp"
  unsigned long long trn = transport_route_number ;
 /* exec sql end declare section */
-#line 135 "transport_route.cpp"
+#line 137 "transport_route.cpp"
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "delete from transport_route where start_country_name = $1  and start_state_name = $2  and start_city = $3  and finish_country_name = $4  and finish_state_name = $5  and finish_city = $6  and number = $7 ", 
 	ECPGt_char,&(scn),(long)0,(long)1,(1)*sizeof(char), 
@@ -267,10 +269,10 @@ void delete_transport_route() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EOIT, ECPGt_EORT);}
-#line 136 "transport_route.cpp"
+#line 138 "transport_route.cpp"
 
 	{ ECPGtrans(__LINE__, NULL, "commit");}
-#line 137 "transport_route.cpp"
+#line 139 "transport_route.cpp"
 
 	return;
 }
@@ -286,37 +288,37 @@ void printTable_transport_route() {
 
 
 	
-#line 142 "transport_route.cpp"
+#line 144 "transport_route.cpp"
  char scn [ 256 ] ;
  
-#line 143 "transport_route.cpp"
+#line 145 "transport_route.cpp"
  char ssn [ 256 ] ;
  
-#line 144 "transport_route.cpp"
+#line 146 "transport_route.cpp"
  char sc [ 256 ] ;
  
-#line 145 "transport_route.cpp"
+#line 147 "transport_route.cpp"
  char fcn [ 256 ] ;
  
-#line 146 "transport_route.cpp"
+#line 148 "transport_route.cpp"
  char fsn [ 256 ] ;
  
-#line 147 "transport_route.cpp"
+#line 149 "transport_route.cpp"
  char fc [ 256 ] ;
  
-#line 148 "transport_route.cpp"
+#line 150 "transport_route.cpp"
  unsigned long long trn ;
 /* exec sql end declare section */
-#line 151 "transport_route.cpp"
+#line 153 "transport_route.cpp"
 
 
 
 	/* declare cursor_transport_route cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , number from transport_route order by number */
-#line 155 "transport_route.cpp"
+#line 157 "transport_route.cpp"
 
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "declare cursor_transport_route cursor for select start_country_name , start_state_name , start_city , finish_country_name , finish_state_name , finish_city , number from transport_route order by number", ECPGt_EOIT, ECPGt_EORT);}
-#line 157 "transport_route.cpp"
+#line 159 "transport_route.cpp"
 
 
 	while (true) {
@@ -335,7 +337,7 @@ void printTable_transport_route() {
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, 
 	ECPGt_unsigned_long_long,&(trn),(long)1,(long)1,sizeof(unsigned long long), 
 	ECPGt_NO_INDICATOR, NULL , 0L, 0L, 0L, ECPGt_EORT);}
-#line 160 "transport_route.cpp"
+#line 162 "transport_route.cpp"
 
 
 		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
@@ -354,7 +356,7 @@ void printTable_transport_route() {
 	}
 
 	{ ECPGdo(__LINE__, 0, 1, NULL, 0, ECPGst_normal, "close cursor_transport_route", ECPGt_EOIT, ECPGt_EORT);}
-#line 177 "transport_route.cpp"
+#line 179 "transport_route.cpp"
 
 	return;
 }

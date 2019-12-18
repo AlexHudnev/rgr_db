@@ -1,3 +1,4 @@
+EXEC SQL WHENEVER SQLERROR SQLPRINT;
 
 void create_trip() {
 	cout << "Введите название страны отправления:" << endl;
@@ -98,14 +99,17 @@ void show_trip() {
 		SELECT  start_country_name, start_state_name, start_city, finish_country_name, finish_state_name, finish_city, transport_type  FROM trip WHERE passenger_passport_id = :pid AND transport_route_number = :trn AND date = :d ORDER BY date;
 
 	EXEC SQL OPEN cursor_trip_show;
+  int count = 0;
 
 	while (true) {
 		EXEC SQL FETCH cursor_trip_show INTO :scn, :ssn, :sc, :fcn, :fsn, :fc, :tt;
 
-		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+		if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+		{
+			if ( count == 0) cout << "Не найдено\n";
 			break;
 		}
-
+    count ++;
 		cout << endl;
 		cout << " Название страны отправления:" << scn << endl;
 		cout << " Название AE отправления:" << ssn << endl;

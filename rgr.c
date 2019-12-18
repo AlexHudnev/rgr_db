@@ -80,17 +80,10 @@ struct sqlca_t *ECPGget_sqlca(void);
 
 using namespace std;
 
-void set_error_handler()
-{
-    /* exec sql whenever sqlerror  call error_handler ( ) ; */
-#line 7 "rgr.pgc"
+/* exec sql whenever sqlerror  sqlprint ; */
+#line 5 "rgr.pgc"
 
-}
-void error_handler()
-{
-	cout << "***** Error : " << sqlca.sqlerrm.sqlerrmc;
-	exit(-1);
-}
+
 void connectionToDb(const char* host, const char* dbname, const char* user, const char* pass) {
 	/* exec sql begin declare section */
 		 
@@ -98,19 +91,19 @@ void connectionToDb(const char* host, const char* dbname, const char* user, cons
 		    
 		    
 	
-#line 16 "rgr.pgc"
+#line 9 "rgr.pgc"
  char target [ 256 ] ;
  
-#line 17 "rgr.pgc"
+#line 10 "rgr.pgc"
  const char * db = dbname ;
  
-#line 18 "rgr.pgc"
+#line 11 "rgr.pgc"
  const char * u = user ;
  
-#line 19 "rgr.pgc"
+#line 12 "rgr.pgc"
  const char * p = pass ;
 /* exec sql end declare section */
-#line 20 "rgr.pgc"
+#line 13 "rgr.pgc"
 
 
 	strcpy(target, db);
@@ -120,10 +113,10 @@ void connectionToDb(const char* host, const char* dbname, const char* user, cons
 	cout << "target: " << target << endl;
 
 	{ ECPGconnect(__LINE__, 0, target , u , p , NULL, 0); 
-#line 28 "rgr.pgc"
+#line 21 "rgr.pgc"
 
-if (sqlca.sqlcode < 0) error_handler ( );}
-#line 28 "rgr.pgc"
+if (sqlca.sqlcode < 0) sqlprint();}
+#line 21 "rgr.pgc"
 
 }
 
@@ -180,7 +173,7 @@ void menu() {
 }
 
 int main() {
-	set_error_handler();
+	
 
 	connectionToDb("localhost", "rgr", "alex", "1111");
 

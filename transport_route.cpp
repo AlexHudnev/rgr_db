@@ -72,7 +72,9 @@ void show_transport_route() {
 	while (true) {
 		EXEC SQL FETCH cursor_transport_route_show INTO :scn, :ssn, :sc, :fcn, :fsn, :fc, :trn;
 
-		if (sqlca.sqlcode == ECPG_NOT_FOUND) {
+		if (sqlca.sqlcode == ECPG_NOT_FOUND || strncmp(sqlca.sqlstate,"00",2))
+		{
+			cout << "Не найдено\n";
 			break;
 		}
 
